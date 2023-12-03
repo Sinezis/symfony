@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All Categories
+{% endblock %}
+
+{% block body %}
+	<h1>Toutes les catégories de la table catégorie :
+	</h1>
+	{% for category in categories %}
+		<div>
+			<h2>{{ loop.index }}
+				/
+				{{ category.name }}</h2>
+
+
+			{# Lien vers la fiche de la série : #}
+			<a href="{{ path("category_show", { categoryName: category.name }) }}">Voir la fiche</a>
+		</div>
+	{% else %}
+		Aucune série trouvée.
+	{% endfor %}
+
+	<a href="{{ path('app_index') }}">
+		Retour à l'accueil
+	</a>
+{% endblock %}

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Program;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Category;
 
 /**
  * @extends ServiceEntityRepository<Program>
@@ -19,6 +20,17 @@ class ProgramRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Program::class);
+    }
+
+    public function getCategorySeries (Category $category ) {
+        $qb = $this->createQueryBuilder('p');
+
+        $qb -> where('p.category = ' . $category->getId());
+
+        $qb->orderBy('p.id', 'DESC');
+
+        $query = $qb->getQuery();
+        return $query->setMaxResults(3)->getResult();
     }
 
 //    /**
