@@ -6,11 +6,10 @@ use App\Entity\Program;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
-    /*public const PROGRAM = [
+    public const PROGRAM = [
         ['Walking Dead', 'Des zombies envahissent la terre', 'Horreur'],
         ['Game of Throne', 'Des morts vivants envahissent Westeros', 'Fantastique'],
         ['Breaking Bad', 'Meilleure série de tous les temps', 'Action'],
@@ -24,17 +23,15 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
         ['Cyberpunk', 'Une dystopie transhumaniste', 'Animation'],
         ['Midnight Mass', 'Des vampires sur une ile', 'Horreur'],
         ['Hannibal', 'L\'histoire d\'Hanibal Lecter', 'Horreur']
-    ];*/
+    ];
     public function load(ObjectManager $manager)
     {
-        $faker = Factory::create();
-
-        for($i = 0; $i < 10; $i++) {
+        foreach (self::PROGRAM as $info) {
         $program = new Program();
-        $program->setTitle($faker->word());
-        $program->setSynopsis($faker->words(10, true));
-        $program->setCategory($this->getReference('category_' . $faker->numberBetween(0,6)));
-        $this->addReference('program_' . $i, $program);
+        $program->setTitle($info[0]);
+        $program->setSynopsis($info[1]);
+        $program->setCategory($this->getReference('category_' . $info[2]));
+        $this->addReference('program_' . $info[0], $program);
         $manager->persist($program);
         $manager->flush();
         }
