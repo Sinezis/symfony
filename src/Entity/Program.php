@@ -9,6 +9,10 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
+#[UniqueEntity(
+    fields: 'title',
+    message: 'ce titre existe déjà'
+)]
 class Program
 {
     #[ORM\Id]
@@ -17,9 +21,20 @@ class Program
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Le programme saisi {{ value }} est trop long, il ne devrait pas dépasser {{ limit }} caractères',
+    )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank]
+    #[Assert\Regex(
+        pattern: '/plus belle la vie/',
+        match: false,
+        message: 'On parle de vraies séries ici',
+    )]
     private ?string $synopsis = null;
 
     #[ORM\Column(length: 255, nullable: true)]
