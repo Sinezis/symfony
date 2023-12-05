@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Acteurs
+	{{ actor.name }}
+{% endblock %}
+
+{% block body %}
+	{% for program in actor.programs %}
+		<li>
+			<a href="{{ path('program_show', { id: program.id }) }}">
+				{{ program.title }}</a>
+		</li>
+	{% else %}
+		<li>Aucun programme pour cet acteur</li>
+	{% endfor %}
+	<a href="{{ path('program_index') }}">Retour à la liste des programmes</a>
+{% endblock %}
