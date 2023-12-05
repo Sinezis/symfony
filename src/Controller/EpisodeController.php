@@ -33,6 +33,8 @@ class EpisodeController extends AbstractController
             $entityManager->persist($episode);
             $entityManager->flush();
 
+            $this->addFlash('success', 'The new episode has been created');
+
             return $this->redirectToRoute('app_episode_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -75,6 +77,7 @@ class EpisodeController extends AbstractController
             $entityManager->remove($episode);
             $entityManager->flush();
         }
+        $this->addFlash('danger', 'The episode has been deleted');
 
         return $this->redirectToRoute('app_episode_index', [], Response::HTTP_SEE_OTHER);
     }
