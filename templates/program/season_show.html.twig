@@ -24,7 +24,7 @@
 			{% endfor %}
 		</p>
 
-		<a href="{{ path('program_show', { id: program.id }) }}">
+		<a href="{{ path('program_show', { programSlug: program.slug }) }}">
 			Retour à la fiche programme
 		</a>
 	</p>

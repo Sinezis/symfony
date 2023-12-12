@@ -3,16 +3,23 @@
 namespace App\Entity;
 
 use App\Repository\ProgramRepository;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+use DateTime;
+use DatetimeInterface;
 
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
 #[UniqueEntity(
     fields: 'title',
     message: 'ce titre existe déjà'
 )]
+#[Vich\Uploadable]
 class Program
 {
     #[ORM\Id]
@@ -40,6 +47,16 @@ class Program
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $poster = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?DatetimeInterface $updatedAt = null;
+
+    #[Vich\UploadableField(mapping: 'poster_file', fileNameProperty: 'poster')]
+    #[Assert\File(
+        maxSize: '1M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+    )]
+    private ?File $posterFile = null;
+
     #[ORM\ManyToOne(inversedBy: 'programs')]
     private ?Category $category = null;
 
@@ -48,6 +65,9 @@ class Program
 
     #[ORM\ManyToMany(targetEntity: Actor::class, mappedBy: 'programs')]
     private Collection $actors;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -97,6 +117,32 @@ class Program
     {
         $this->poster = $poster;
 
+        return $this;
+    }
+
+    public function setPosterFile(File $image = null): Program
+    {
+        $this->posterFile = $image;
+        if ($image) {
+          $this->updatedAt = new DateTime('now');
+        }
+    
+        return $this;
+      }
+
+    public function getPosterFile(): ?File
+    {
+        return $this->posterFile;
+    }
+
+    public function getUpdatedAt(): ?DatetimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?DatetimeInterface $updatedAt): Program
+    {
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 
@@ -165,6 +211,18 @@ class Program
         if ($this->actors->removeElement($actor)) {
             $actor->removeProgram($this);
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }
