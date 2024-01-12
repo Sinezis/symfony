@@ -7,30 +7,60 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<li class="nav-item">
-					<a class="nav-link active" aria-current="page">Home</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link">Link</a>
+					<a href="{{ path('app_index') }}" class="nav-link active" aria-current="page">Home</a>
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						Dropdown
+						Catégories
 					</a>
 					<ul class="dropdown-menu">
 						<li>
-							<a class="dropdown-item">Action</a>
-						</li>
-						<li>
-							<a class="dropdown-item">Another action</a>
+							<a href="{{ path('category_index') }}" class="dropdown-item">Liste</a>
 						</li>
 						<li><hr class="dropdown-divider"></li>
 						<li>
-							<a class="dropdown-item">Something else here</a>
+							<a href="{{ path('category_show', {'categoryName': 'Action'} ) }}" class="dropdown-item">Action</a>
+						</li>
+						<li>
+							<a href="{{ path('category_show', {'categoryName': 'Aventure'} ) }}" class="dropdown-item">Aventure</a>
+						</li>
+						<li>
+							<a href="{{ path('category_show', {'categoryName': 'Animation'} ) }}" class="dropdown-item">Animation</a>
+						</li>
+						<li>
+							<a href="{{ path('category_show', {'categoryName': 'Fantastique'} ) }}" class="dropdown-item">Fantastique</a>
+						</li>
+						<li>
+							<a href="{{ path('category_show', {'categoryName': 'Horreur'} ) }}" class="dropdown-item">Horreur</a>
+						</li>
+						<li>
+							<a href="{{ path('category_show', {'categoryName': 'SciFi'} ) }}" class="dropdown-item">Sci-Fi</a>
+						</li>
+						<li>
+							<a href="{{ path('category_show', {'categoryName': 'Fantasy'} ) }}" class="dropdown-item">Fantasy</a>
 						</li>
 					</ul>
 				</li>
-
+				<li class="nav-item" style="padding-left:3rem">
+					<a class="nav-link active" style="" aria-current="page" href="{{ path('program_index') }}">Séries</a>
+				</li>
+				<li class="nav-item" style="padding-left:3rem">
+					<a class="nav-link active" style="" aria-current="page" href="{{ path('app_actor_index') }}">Acteurs</a>
+				</li>
+				<li class="nav-item" style="padding-left:3rem">
+					<a class="nav-link" style="" href="#">Mes favoris</a>
+				</li>
 			</ul>
+			<div>
+				{% if app.user %}
+					{{ app.user.email }}
+					<a href="{{ path('app_logout') }}">
+						Se déconnecter</a>
+				{% else %}
+					<a href="{{ path('app_login') }}">
+						Se connecter</a>
+				{% endif %}
+			</div>
 			<form class="d-flex">
 				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 				<button class="btn btn-outline-success" type="submit">Search</button>

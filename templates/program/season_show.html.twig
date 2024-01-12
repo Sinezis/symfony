@@ -7,25 +7,24 @@
 	{{ program.title }}
 	saison
 	{{ season.number }}
-	{{ program.category.name }}
-	{{ program.synopsis }}
-	<p>
-		{% for episode in season.episodes %}
-			<div>
-				<h2>{{ episode.number }}</h2>
+</br>
+{{ program.category.name }}</br>{{ program.synopsis }}<p>
+{% for episode in season.episodes %}
+	<div>
+		<h2>Episode
+			{{ episode.number }}
+			:</h2>
 
-				{# Lien vers l'épisode : #}
+		{# Lien vers l'épisode : #}
 
-				{{ episode.title }}
-				/
-				{{ episode.synopsis}}
-			{% else %}
-				Aucun épisode trouvé.
-			{% endfor %}
-		</p>
+		<h3>
+			<a href=" {{ path('public_episode_show', { episodeSlug: episode.slug }) }}">{{ episode.title }}</a>
+		</h3>
 
-		<a href="{{ path('program_show', { programSlug: program.slug }) }}">
-			Retour à la fiche programme
-		</a>
-	</p>
-{% endblock %}
+		{{ episode.synopsis}}
+	</br>
+
+{% else %}
+	Aucun épisode trouvé.
+{% endfor %}</p><a href=" {{ path('program_show', { programSlug: program.slug } ) }}">
+Retour à la fiche programme</a></p>{% endblock %}

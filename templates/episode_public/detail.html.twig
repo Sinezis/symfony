@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Episode
+{% endblock %}
+
+{% block body %}
+<h1>Episode</h1>
+
+<table class="table">
+	<tbody>
+		<tr>
+			<th>Id</th>
+			<td>{{ episode.id }}</td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td>{{ episode.title }}</td>
+		</tr>
+		<tr>
+			<th>Number</th>
+			<td>{{ episode.number }}</td>
+		</tr>
+		<tr>
+			<th>Synopsis</th>
+			<td>{{ episode.synopsis }}</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Commentaires</h3>
+<ul>
+	{% for comment in episode.comment %}
+		<li>
+			{{ comment.author.email }}
+			:
+			{{comment.rate}}/5</li>
+	</br>
+	{{comment.comment}}
+</li></li>{% endfor %}</ul>{% if app.user %}<div>{{ form_start(form) }}{{ form(form) }}
+{{ form_end(form) }}</div>{% endif %}<a href="{{ path("program_season_show", { programSlug: episode.season.program.slug , seasonId: episode.season.id}) }}">Back</a>{% endblock %}

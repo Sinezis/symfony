@@ -26,7 +26,7 @@
 				<ul>
 					{% for actor in program.actors %}
 						<li>
-							<a href="{{ path('actor_show', { id: actor.id }) }}">
+							<a href="{{ path('app_actor_show', { id: actor.id }) }}">
 								{{ actor.name }}</a>
 						</li>
 					{% else %}

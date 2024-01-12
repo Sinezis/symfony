@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Episode;
+use App\Form\CommentType;
 use App\Form\EpisodeType;
 use App\Repository\EpisodeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -65,6 +67,34 @@ class EpisodeController extends AbstractController
     {
         return $this->render('episode/show.html.twig', [
             'episode' => $episode,
+        ]);
+    }
+
+    //episodes version utilisateur
+    #[Route('/public/{episodeSlug}', name: 'public_episode_show', methods: ['GET', 'POST'])]
+    public function publicShow(
+        #[MapEntity(mapping: ['episodeSlug' => 'slug'])] Episode $episode,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        $comment = new Comment;
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $user = $this->getUser();
+            $comment->setAuthor($user);
+            $comment->setEpisode($episode);
+
+            $entityManager->persist($comment);
+            $entityManager->flush();
+        }
+        return $this->render('episode_public/detail.html.twig', [
+            'episode' => $episode,
+            'form' => $form,
         ]);
     }
 
