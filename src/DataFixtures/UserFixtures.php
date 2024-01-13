@@ -31,9 +31,24 @@ class UserFixtures extends Fixture
         $contributor->setPassword($hashedPassword);
         $manager->persist($contributor);
 
+        // Création d’un autre utilisateur de type “contributeur” (= auteur)
+        $contributor = new User();
+        $contributor->setEmail('tatitabo@outlook.fr');
+        $contributor->setRoles(['ROLE_CONTRIBUTOR']);
+        $hashedPassword = $this->passwordHasher->hashPassword(
+            $contributor,
+            'tototo'
+        );
+
+        $contributor->setPassword($hashedPassword);
+        $manager->persist($contributor);
+
+        $this->addReference('contributor', $contributor);
+
+
         // Création d’un utilisateur de type “administrateur”
         $admin = new User();
-        $admin->setEmail('adrien.cremeaux@outlook.com');
+        $admin->setEmail('adrien.cremeaux@outlook.fr');
         $admin->setRoles(['ROLE_ADMIN']);
         $hashedPassword = $this->passwordHasher->hashPassword(
             $admin,
@@ -41,6 +56,17 @@ class UserFixtures extends Fixture
         );
         $admin->setPassword($hashedPassword);
         $manager->persist($admin);
+
+        // Création d’un utilisateur
+        $user = new User();
+        $user->setEmail('fernieadri@gmail.com');
+        $admin->setRoles(['ROLE_USER']);
+        $hashedPassword = $this->passwordHasher->hashPassword(
+            $user,
+            'tototo'
+        );
+        $user->setPassword($hashedPassword);
+        $manager->persist($user);
 
         // Sauvegarde des 2 nouveaux utilisateurs :
         $manager->flush();

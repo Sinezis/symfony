@@ -25,6 +25,9 @@
 				<td>{{ season.description }}</td>
 			</tr>
 		</tbody>
+		{% if is_granted("ROLE_ADMIN") %}
+			<a href="{{ path('program_edit', { 'programslug': program.slug} ) }}">Éditer</a>
+		{% endif %}
 	</table>
 
 	<a href="{{ path('app_season_index') }}">back to list</a>

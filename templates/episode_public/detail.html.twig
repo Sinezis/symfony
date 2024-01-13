@@ -28,6 +28,11 @@
 </table>
 
 <h3>Commentaires</h3>
+{% for flashMessage in app.session.flashbag.get('danger') %}
+
+	{{ flashMessage }}
+
+{% endfor %}
 <ul>
 	{% for comment in episode.comment %}
 		<li>
@@ -36,5 +41,9 @@
 			{{comment.rate}}/5</li>
 	</br>
 	{{comment.comment}}
+	<a href="{{ path('comment_delete', { id: comment.id }) }}">
+		<i class='bi bi-trash2-fill'></i>
+		<span>Delete</span>
+	</a>
 </li></li>{% endfor %}</ul>{% if app.user %}<div>{{ form_start(form) }}{{ form(form) }}
 {{ form_end(form) }}</div>{% endif %}<a href="{{ path("program_season_show", { programSlug: episode.season.program.slug , seasonId: episode.season.id}) }}">Back</a>{% endblock %}

@@ -7,10 +7,12 @@ use App\Entity\Season;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use App\Repository\ProgramRepository;
 use App\Repository\SeasonRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Form\ProgramType;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +32,8 @@ class ProgramController extends AbstractController
         $programs = $programRepository->findAll();
         return $this->render(
             'program/index.html.twig', [
-            'programs' => $programs
+            'programs' => $programs,
+            'program' => null,
          ]);
     }
 
@@ -57,7 +60,11 @@ class ProgramController extends AbstractController
             $mailer->send($email);
             
             $this->addFlash('success', 'The new program has been created');
-    
+            
+            // Set the program's owner
+            $program->setOwner($this->getUser());
+            $programRepository->save($program, true);
+
             // Redirect to program list
             return $this->redirectToRoute('program_index');
         }
@@ -143,6 +150,11 @@ class ProgramController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        if ($this->getUser() !== $program->getOwner()) {
+            // If not the owner, throws a 403 Access Denied exception
+            throw $this->createAccessDeniedException('Only the owner can edit the program!');
         }
 
         return $this->render('program/edit.html.twig', [

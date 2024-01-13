@@ -19,6 +19,9 @@
 						{# Lien vers la saison : #}
 						<a href="{{ path("program_season_show", { programSlug: program.slug , seasonId: season.id}) }}">Voir la fiche</a>
 					</div>
+					{% if is_granted("ROLE_ADMIN") %}
+						<a href="{{ path('program_edit', { 'programSlug': program.slug} ) }}">Éditer</a>
+					{% endif %}
 				{% else %}
 					Aucune saison trouvée.
 				{% endfor %}

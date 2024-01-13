@@ -8,7 +8,7 @@
 	</h1>
 	{% for program in programs %}
 		<div>
-			<h2>{{ loop.index }}
+			<h2>{{ program.id }}
 				/
 				{{ program.title }}
 				- Catégorie :
@@ -17,7 +17,9 @@
 			{# Lien vers la fiche de la série : #}
 			<a href="{{ path("program_show", { programSlug: program.slug }) }}">Voir la fiche</a>
 
-			<a href="{{ path('program_edit', { programSlug: program.slug }) }}">edit</a>
+			{% if is_granted("ROLE_ADMIN") %}
+				<a href="{{ path('program_edit', { 'slug': program.slug} ) }}">Éditer</a>
+			{% endif %}
 		</div>
 	{% else %}
 		Aucune série trouvée.

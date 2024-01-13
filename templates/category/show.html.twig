@@ -15,6 +15,9 @@
 			<p>{{ program.synopsis }}</p>
 			{# Lien vers la fiche de la série : #}
 			<a href="{{ path("program_show", { programSlug: program.slug }) }}">Voir la fiche</a>
+			{% if is_granted("ROLE_ADMIN") %}
+				<a href="{{ path('program_edit', { 'programSlug': program.slug} ) }}">Éditer</a>
+			{% endif %}
 		</div>
 	{% else %}
 		Aucune série trouvée.

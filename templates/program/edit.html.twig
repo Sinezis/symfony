@@ -7,8 +7,7 @@
 	<h1>Edit Program</h1>
 
 	{{ include('program/_form.html.twig', {'button_label': 'Update'}) }}
-
-	<a href="{{ path('program_index') }}">back to list</a>
+	<a href="{{ path('program_edit', { 'slug': program.slug} ) }}">Éditer</a>
 
 	{{ include('program/_delete_form.html.twig') }}
 {% endblock %}

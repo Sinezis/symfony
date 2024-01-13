@@ -69,6 +69,9 @@ class Program
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'programs')]
+    private User $owner;
+
     public function __construct()
     {
         $this->seasons = new ArrayCollection();
@@ -224,6 +227,20 @@ class Program
     {
         $this->slug = $slug;
 
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner(): User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(User $owner): static 
+    {
+        $this->owner = $owner;
         return $this;
     }
 }
